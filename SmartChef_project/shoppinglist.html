@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingredient Pantry - Smart Chef</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            background: url('shopping-bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+        }
+        h1 {
+            background: rgba(0, 150, 136, 0.9); /* Softer green */
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            color: white;
+        }
+        .expiration-date {
+            font-style: italic;
+            color: #888; /* Lighter gray for expiration date */
+        }
+          
+        .search-button:hover {
+            background-color: #008C7F; /* Darker shade of green */
+        }
+
+        /* Buttons in Shopping List */
+        .btn-primary {
+            background-color: #00BFA5; /* Same green */
+            border-color: #00BFA5;
+        }
+
+        .btn-primary:hover {
+            background-color: #008C7F; /* Darker green for hover */
+            border-color: #008C7F;
+        }
+
+        .btn-danger {
+            margin: 10px;
+            background-color: #00BFA5; /* Same green */
+            border-color: #00BFA5;
+        }
+        .btn-danger:hover {
+            background-color: #00BFA5; /* Same green */
+            border-color: #00BFA5;
+        }
+        .btn-success {
+            background-color: #4caf50; /* Light green button */
+            border-color: #4caf50;
+        }
+        .btn-success:hover {
+            background-color: #66bb6a; /* Slightly brighter green */
+            border-color: #66bb6a;
+        }
+        .search-input {
+            background-color: #f1f1f1; /* Light background for input */
+            border: 1px solid #ddd;
+        }
+        .search-button {
+            background-color: #4caf50; /* Light green button */
+            border-color: #4caf50;
+        }
+        .search-button:hover {
+            background-color: #66bb6a; /* Slightly brighter green */
+            border-color: #66bb6a;
+        }
+        a {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-section">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" href="smartchef.html">Smart Chef</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="smartchef.html">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="recipes.html">Recipes</a></li>
+                        <li class="nav-item"><a class="nav-link" href="shoppinglist.html">Ingredient Pantry</a></li>
+                        <li class="nav-item"><a class="nav-link" href="mealplanner.html">Meal Planner</a></li>
+                        <li class="nav-item dropdown">
+                            <button class="profile-button">Profile</button>
+                            <ul class="profile-menu">
+                                <li><a href="#">Sign In</a></li>
+                                <li><a href="#">Sign Up</a></li>
+                                <li><a href="#">Recipe History</a></li>
+                                <li><a href="#">Account</a></li>
+                                <li><a href="#">Settings</a></li>
+                                <li><a href="#">Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Shopping List Section -->
+        <div class="container mt-2">
+            <h1>Ingredient Pantry</h1>
+            <div class="search-section1 text-center">
+                <input type="text" class="form-control search-input" placeholder="Search items...">
+                <button class="btn btn-primary search-button mt-2">Search</button>
+            </div>
+
+            <div class="shopping-list-container mt-4">
+                <ul class="list-group" id="shoppingList">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Apples <span class="expiration-date">(Expiry: 2025-04-15)</span>
+                        <button class="btn btn-danger btn-sm" onclick="removeItem(this)">Remove</button>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Bread <span class="expiration-date">(Expiry: 2025-03-28)</span>
+                        <button class="btn btn-danger btn-sm" onclick="removeItem(this)">Remove</button>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Milk <span class="expiration-date">(Expiry: 2025-04-05)</span>
+                        <button class="btn btn-danger btn-sm" onclick="removeItem(this)">Remove</button>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="add-item-section mt-4 text-center">
+                <form id="addItemForm" class="d-flex justify-content-center">
+                    <input type="text" class="form-control w-50" id="newItem" placeholder="Add new item..." required>
+                    <input type="date" class="form-control w-50 ms-2" id="expiryDate" required>
+                    <button type="submit" class="btn btn-success ms-2">Add</button>
+                </form>
+            </div>
+
+            <div class="text-center mt-4">
+                <button class="btn btn-danger" onclick="clearShoppingList()">Clear All</button>
+            </div>
+            <a href="aisuggestions.html">
+                <button class="find-recipes-btn">AI Suggestions</button>
+            </a> 
+        </div>
+
+        <script>
+            
+            document.getElementById('addItemForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const newItem = document.getElementById('newItem').value;
+                const expiryDate = document.getElementById('expiryDate').value;
+                
+                if (newItem && expiryDate) {
+                    const shoppingList = document.getElementById('shoppingList');
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                    li.textContent = newItem;
+                    const expirySpan = document.createElement('span');
+                    expirySpan.className = 'expiration-date';
+                    expirySpan.textContent = `(Expiry: ${expiryDate})`;
+                    li.appendChild(expirySpan);
+                    
+                    const removeButton = document.createElement('button');
+                    removeButton.className = 'btn btn-danger btn-sm';
+                    removeButton.textContent = 'Remove';
+                    removeButton.onclick = function() { removeItem(this); };
+                    li.appendChild(removeButton);
+                    shoppingList.appendChild(li);
+                    
+                    document.getElementById('newItem').value = '';
+                    document.getElementById('expiryDate').value = ''; // Clear expiry date input
+                }
+            });
+
+              // Tarih seçicinin sadece bugünden sonraki tarihleri kabul etmesini sağlama
+            document.querySelectorAll('input[type="date"]').forEach(input => {
+            input.setAttribute('min', new Date().toISOString().split('T')[0]); // Bugünden itibaren geçerli
+            });
+
+
+            function removeItem(button) {
+                const li = button.parentElement;
+                li.remove();
+            }
+
+            function clearShoppingList() {
+                document.getElementById('shoppingList').innerHTML = '';
+            }
+
+            document.querySelector('.search-button').addEventListener('click', function() {
+                const searchTerm = document.querySelector('.search-input').value.toLowerCase();
+                const items = document.querySelectorAll('#shoppingList li');
+                items.forEach(item => {
+                    const itemText = item.textContent.toLowerCase();
+                    item.style.display = itemText.includes(searchTerm) ? 'flex' : 'none';
+                });
+            });
+        </script>
+
+         <!-- Footer -->
+    <footer class="footer">
+        <div class="left-section">
+            <h3>Smart Chef</h3>
+            <div class="social-icons">
+                <a href="#">YouTube</a>
+                <a href="#">Pinterest</a>
+                <a href="#">Instagram</a>
+                <a href="#">Facebook</a>
+                <a href="#">LinkedIn</a>
+            </div>
+            <div class="store-buttons">
+                <a href="https://play.google.com/store/apps?utm_source=emea_OO&utm_medium=playstore&utm_content=Nov1824&utm_campaign=Evergreen&pcampaignid=MKT-EDR-emea-tr-1710138-OO-playstore-ap-Evergreen-Nov1824-Text_Search_SKWS-EXA%7C7Cpid_80399023-cid_0-aid_256595225&gad_source=1&gclid=Cj0KCQjwkN--BhDkARIsAD_mnIrmB33Rf54hKyKQbPrtLw9C2yk15ZkPPJVJy03dvBRuc3LPQ-_xHYIaAugyEALw_wcB&gclsrc=aw.ds"><img src="googleplay.png" alt="Google Play"></a>
+                <a href="https://www.apple.com/tr/app-store/"><img src="appstore.png" alt="App Store"></a>
+            </div>
+            <div class="subscribe-section">
+                <input type="email" placeholder="Enter your email">
+                <button class="subscribe-button">Sign Up</button>
+                <p>Will be used in accordance with our privacy policy</p>
+            </div>
+            <div class="footer-bottom">
+                <div class="gdpr-section">
+                    <p>© SmartChef Rights Reserved</p>
+                    <a href="#">GDPR Request</a> | 
+                    <a href="#">Do Not Sell My Personal Information</a>
+                    <select class="language-selector">
+                        <option>English</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="center-section">
+            <h3>Our Content</h3>
+            <ul class="footer-links">
+                <li><a href="#">Recipes</a></li>
+                <li><a href="#">Articles</a></li>
+                <li><a href="#">Collections</a></li>
+                <li><a href="#">Meal Plans</a></li>
+                <li><a href="#">Search</a></li>
+            </ul>
+        </div>
+
+        <div class="right-section">
+            <h3>Our Business Solution</h3>
+            <ul class="footer-links">
+                <li><a href="#">Cooking Experience Platform</a></li>
+                <li><a href="#">Cost Per Order Campaigns</a></li>
+                <li><a href="#">Content Creation</a></li>
+                <li><a href="#">Shoppable Tech</a></li>
+            </ul>
+        </div>
+        <div class="right-section">
+            <h3>Company</h3>
+            <ul class="footer-links">
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Careers</a></li>
+                <li><a href="#">Press</a></li>
+                <li><a href="#">Contact</a></li>
+                <li><a href="#">Terms of Service</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Cookie Policy</a></li>
+                <li><a href="#">FAQ</a></li>
+            </ul>
+        </div>
+
+    </footer>
+    </div>
+</body>
+</html>

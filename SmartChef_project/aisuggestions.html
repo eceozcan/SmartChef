@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Suggestions - Smart Chef</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            background: url('images/shopping-bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+        }
+        .category-dropdown { width: 700px; max-height: 400px; overflow-y: auto; }  
+        .dropdown-item.active {
+            background-color: #4caf50;
+            color: white;
+            font-weight: bold;
+        }
+
+        .category-dropdown .dropdown-item { 
+            white-space: nowrap; padding: 4px 8px; font-size: 0.9rem; 
+        } 
+        h1 {
+            background: rgba(0, 150, 136, 0.9); /* Softer green */
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            color: white;
+        }
+        .expiration-date {
+            font-style: italic;
+            color: #888; /* Lighter gray for expiration date */
+        }
+          
+        .search-button:hover {
+            background-color: #008C7F; /* Darker shade of green */
+        }
+
+        /* Buttons in Shopping List */
+        .btn-primary {
+            background-color: #00BFA5; /* Same green */
+            border-color: #00BFA5;
+        }
+
+        .btn-primary:hover {
+            background-color: #008C7F; /* Darker green for hover */
+            border-color: #008C7F;
+        }
+
+        .slider-container 
+        { 
+            overflow-x: auto; white-space: nowrap; padding-bottom: 10px; } .recipe-slider { display: flex; flex-wrap: nowrap; 
+        } 
+
+        .recipe-slider .card 
+        { 
+            flex: 0 0 auto; min-width: 250px; 
+        } 
+        .btn-danger {
+            margin: 10px;
+            background-color: #00BFA5; /* Same green */
+            border-color: #00BFA5;
+        }
+        .btn-danger:hover {
+            background-color: #00BFA5; /* Same green */
+            border-color: #00BFA5;
+        }
+        .btn-success {
+            background-color: #4caf50; /* Light green button */
+            border-color: #4caf50;
+        }
+        .btn-success:hover {
+            background-color: #66bb6a; /* Slightly brighter green */
+            border-color: #66bb6a;
+        }
+        .search-input {
+            background-color: #f1f1f1; /* Light background for input */
+            border: 1px solid #ddd;
+        }
+        .search-button {
+            background-color: #4caf50; /* Light green button */
+            border-color: #4caf50;
+        }
+        .search-button:hover {
+            background-color: #66bb6a; /* Slightly brighter green */
+            border-color: #66bb6a;
+        }
+        .form-check-input {
+            transform: scale(1.3);
+        }
+        .list-group-item {
+            background-color: white;
+            color: black;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-section">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" href="smartchef.html">Smart Chef</a>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="smartchef.html">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="recipes.html">Recipes</a></li>
+                        <li class="nav-item"><a class="nav-link" href="shoppinglist.html">Ingredient Pantry</a></li>
+                        <li class="nav-item"><a class="nav-link" href="mealplanner.html">Meal Planner</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Shopping List Section -->
+        <div class="container mt-4">
+            <h1>AI Suggestions</h1>
+            <div class="search-section">
+                <input type="text" id="searchInput" class="form-control" placeholder="Search for Recipe...">
+                <button class="search-button" id="searchButton">Search</button>
+            </div>
+            
+
+                <button class="btn btn-secondary search-button mt-2" onclick="clearSelection()">Option not selected</button>
+                <button class="btn btn-primary search-button mt-2" onclick="selectAll()">All selected</button>
+
+                <div class="col-md-6">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="categoryFilter" data-bs-toggle="dropdown">
+                            Filter by Category
+                        </button>
+                        <div class="dropdown-menu category-dropdown p-3">
+                            <div class="row row-cols-2 row-cols-md-4 g-2">
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'alcoholic')">Alcoholic</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'baking')">Baking</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'bbq')">BBQ</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'beans')">Beans</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'breakfast')">Breakfast</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'brunch')">Brunch</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'bun')">Bun</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'cake')">Cake</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'calorific')">Calorific</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'caramel')">Caramel</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'casserole')">Casserole</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'cheap')">Cheap</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'cheasy')">Cheasy</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'chilli')">Chilli</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'chocolate')">Chocolate</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'christmas')">Christmas</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'curry')">Curry</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'dairy')">Dairy</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'datenight')">Date Night</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'desert')">Desert</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'dinnerparty')">Dinner Party</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'easter')">Easter</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'egg')">Egg</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'expensive')">Expensive</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'fish')">Fish</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'fresh')">Fresh</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'fruity')">Fruity</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'fusion')">Fusion</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'glazed')">Glazed</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'greasy')">Greasy</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'halloween')">Halloween</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'hangoverfood')">Hangover Food</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'heavy')">Heavy</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'highfat')">High Fat</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'keto')">Keto</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'light')">Light</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'lowcalorie')">Low Calorie</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'lowcarbs')">Low Carbs</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'mainmeal')">Main Meal</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'meat')">Meat</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'mild')">Mild</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'nutty')">Nutty</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'onthego')">On The Go</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'paella')">Paella</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'paleo')">Paleo</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'pancake')">Pancake</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'pasta')">Pasta</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'pie')">Pie</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'pudding')">Pudding</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'pulse')">Pulse</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'salad')">Salad</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'sandwich')">Sandwich</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'sausages')">Sausages</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'savory')">Savory</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'seafood')">Seafood</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'shellfish')">Shellfish</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'sidedish')">Side Dish</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'snack')">Snack</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'soup')">Soup</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'sour')">Sour</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'speciality')">Speciality</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'spicy')">Spicy</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'stew')">Stew</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'streetfood')">Street Food</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'strongflavor')">Strong Flavor</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'summer')">Summer</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'sweet')">Sweet</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'tart')">Tart</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'treat')">Treat</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'unhealthy')">Unhealthy</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'vegan')">Vegan</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'vegetables')">Vegetables</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'vegetarian')">Vegetarian</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'warm')">Warm</a></div>
+                              <div class="col"><a class="dropdown-item" href="#" onclick="toggleFilter(this, 'warming')">Warming</a></div>
+                            </div>
+                          </div>
+                          
+                    </div>
+                </div>
+                <script>
+
+                    function clearFilters() {
+                        // Seçili filtreleri temizle
+                        selectedFilters = [];
+                
+                        // Tüm aktif filtre sınıflarını kaldır
+                        document.querySelectorAll('.dropdown-item.active').forEach(el => {
+                            el.classList.remove('active');
+                        });
+                    }
+                </script>
+                <button class="btn btn-secondary search-button mt-2" onclick="clearFilters()">Clear filters</button>
+
+                
+
+            <div class="shopping-list-container mt-4">
+                <ul class="list-group" id="shoppingList">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Apple <img src="apple.png" class="ms-2">
+                        <span class="quantity-number ms-2">3 grain</span>
+                        <span class="expiration-date ms-2">(Expiry: 15-05-2025)</span>
+                        <input type="checkbox" class="form-check-input item-checkbox ms-2">
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Bread <img src="bread.png" class="ms-2">
+                        <span class="quantity-number ms-2">2 loaves</span>
+                        <span class="expiration-date ms-2">(Expiry: 28-06-2025)</span>
+                        <input type="checkbox" class="form-check-input item-checkbox ms-2">
+                    </li>
+                    <!-- <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Water <img src="indir.jpeg" class="ms-2">
+                        <span class="quantity-number ms-2">500 ml</span>
+                        <span class="expiration-date ms-2">(Expiry: 05-05-2025)</span>
+                        <input type="checkbox" class="form-check-input item-checkbox ms-2">
+                    </li> -->
+                </ul>
+            </div>
+
+            <div class="add-item-section mt-4 text-center">
+                <form id="addItemForm" class="d-flex justify-content-center">
+                    <input type="text" class="form-control w-25" id="newItem" placeholder="Add new item..." required>
+                    <input type="date" class="form-control w-25 ms-2" id="expiryDate" required>
+                    <button type="submit" class="btn btn-success ms-2">Add</button>
+                </form>
+            </div>
+
+            <div class="text-center mt-4">
+                <button class="btn btn-danger" onclick="clearShoppingList()">Clear All</button>
+            </div>
+        </div>
+        
+        <div class="container mt-4"> 
+            <h2 class="text-white">Recipes</h2>
+             <div class="slider-container"> 
+                <div class="recipe-slider d-flex"> 
+                    <!-- Tarif kartları burada --> 
+                     <div class="card me-3" style="min-width: 250px;" data-category="breakfast"> 
+                        <img src="pancake.jpeg" class="card-img-top" alt="Pancakes"> 
+                        <div class="card-body"> 
+                            <h5 class="card-title">Pancakes</h5> 
+                            <button class="btn btn-success" onclick="saveRecipe('Pancakes')">Save Recipe</button> 
+                        </div> 
+                    </div> 
+                    <div class="card me-3" style="min-width: 250px;" data-category="breakfast"> 
+                        <img src="omelette.jpeg" class="card-img-top" alt="Omelette"> 
+                        <div class="card-body"> <h5 class="card-title">Omelette</h5> 
+                            <button class="btn btn-success" onclick="saveRecipe('Omelette')">Save Recipe</button> 
+                        </div> 
+                    </div> 
+                    <div class="card me-3" style="min-width: 250px;" data-category="lunch"> 
+                        <img src="caesarsalad.jpeg" class="card-img-top" alt="Caesar Salad"> 
+                        <div class="card-body"> 
+                            <h5 class="card-title">Caesar Salad</h5> 
+                            <button class="btn btn-success" onclick="saveRecipe('Caesar Salad')">Save Recipe</button> 
+                        </div> 
+                    </div> 
+                    <div class="card me-3" style="min-width: 250px;" data-category="vegan"> 
+                        <img src="veganburger.jpeg" class="card-img-top" alt="Vegan Burger"> 
+                        <div class="card-body"> 
+                            <h5 class="card-title">Vegan Burger</h5> 
+                            <button class="btn btn-success" onclick="saveRecipe('Vegan Burger')">Save Recipe</button> 
+                        </div> 
+                    </div> 
+                    <div class="card me-3" style="min-width: 250px;" data-category="glutenfree"> 
+                        <img src="glutenfreecake.jpeg" class="card-img-top" alt="Gluten-Free Pasta"> 
+                        <div class="card-body"> 
+                            <h5 class="card-title">Gluten-Free Pasta</h5> 
+                            <button class="btn btn-success" onclick="saveRecipe('Gluten-Free Pasta')">Save Recipe</button> 
+                        </div> 
+                    </div> 
+                </div> 
+            </div> 
+        </div>
+
+
+        
+         <!-- Footer -->
+    <footer class="footer">
+        <div class="left-section">
+            <h3>Smart Chef</h3>
+            <div class="social-icons">
+                <a href="#">YouTube</a>
+                <a href="#">Pinterest</a>
+                <a href="#">Instagram</a>
+                <a href="#">Facebook</a>
+                <a href="#">LinkedIn</a>
+            </div>
+            <div class="store-buttons">
+                <a href="https://play.google.com/store/apps?utm_source=emea_OO&utm_medium=playstore&utm_content=Nov1824&utm_campaign=Evergreen&pcampaignid=MKT-EDR-emea-tr-1710138-OO-playstore-ap-Evergreen-Nov1824-Text_Search_SKWS-EXA%7C7Cpid_80399023-cid_0-aid_256595225&gad_source=1&gclid=Cj0KCQjwkN--BhDkARIsAD_mnIrmB33Rf54hKyKQbPrtLw9C2yk15ZkPPJVJy03dvBRuc3LPQ-_xHYIaAugyEALw_wcB&gclsrc=aw.ds"><img src="googleplay.png" alt="Google Play"></a>
+                <a href="https://www.apple.com/tr/app-store/"><img src="appstore.png" alt="App Store"></a>
+            </div>
+            <div class="subscribe-section">
+                <input type="email" placeholder="Enter your email">
+                <button class="subscribe-button">Sign Up</button>
+                <p>Will be used in accordance with our privacy policy</p>
+            </div>
+            <div class="footer-bottom">
+                <div class="gdpr-section">
+                    <p>© SmartChef Rights Reserved</p>
+                    <a href="#">GDPR Request</a> | 
+                    <a href="#">Do Not Sell My Personal Information</a>
+                    <select class="language-selector">
+                        <option>English</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="center-section">
+            <h3>Our Content</h3>
+            <ul class="footer-links">
+                <li><a href="#">Recipes</a></li>
+                <li><a href="#">Articles</a></li>
+                <li><a href="#">Collections</a></li>
+                <li><a href="#">Meal Plans</a></li>
+                <li><a href="#">Search</a></li>
+            </ul>
+        </div>
+
+        <div class="right-section">
+            <h3>Our Business Solution</h3>
+            <ul class="footer-links">
+                <li><a href="#">Cooking Experience Platform</a></li>
+                <li><a href="#">Cost Per Order Campaigns</a></li>
+                <li><a href="#">Content Creation</a></li>
+                <li><a href="#">Shoppable Tech</a></li>
+            </ul>
+        </div>
+        <div class="right-section">
+            <h3>Company</h3>
+            <ul class="footer-links">
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Careers</a></li>
+                <li><a href="#">Press</a></li>
+                <li><a href="#">Contact</a></li>
+                <li><a href="#">Terms of Service</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Cookie Policy</a></li>
+                <li><a href="#">FAQ</a></li>
+            </ul>
+        </div>
+
+    </footer>
+
+            <!-- Scripts -->
+            <script>
+                let selectedFilters = [];  // ✅ filtre listesi
+
+                function toggleFilter(element, tag) {
+                    if (selectedFilters.includes(tag)) {
+                        selectedFilters = selectedFilters.filter(t => t !== tag);
+                        element.classList.remove("active");
+                    } else {
+                        selectedFilters.push(tag);
+                        element.classList.add("active");
+                    }
+}
+
+async function fetchRecipeSuggestions() {
+    const inputValue = document.getElementById("searchInput").value.trim().toLowerCase();
+
+    if (!inputValue) {
+        alert("Please enter an ingredient.");
+        return;
+    }
+
+    const ingredients = [
+        {
+            name: inputValue,
+            quantity: "1",
+            unit: "unit",
+            expiry: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+                       .toLocaleDateString("en-GB")
+                       .split("/")
+                       .join("-")
+        }
+    ];
+
+    // const filters = [];
+    const filters = selectedFilters;
+
+    try {
+        const response = await fetch("http://127.0.0.1:5000/suggest_recipes", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ingredients, filters })
+        });
+
+        const data = await response.json();
+        console.log("✅ Data from API:", data);
+
+        if (data.recipes && data.recipes.length > 0) {
+            renderRecipes(data.recipes);
+        } else {
+            document.querySelector(".recipe-slider").innerHTML = `
+                <p class="text-white">No suitable recipe found.</p>
+            `;
+        }
+    } catch (error) {
+        console.error("🚨 API hatası:", error);
+    }
+}
+
+document.getElementById("searchButton").addEventListener("click", fetchRecipeSuggestions);
+   
+                function renderRecipes(recipes) {
+                    const container = document.querySelector(".recipe-slider");
+                    container.innerHTML = "";
+            
+                    recipes.forEach(recipe => {
+                        const card = document.createElement("div");
+                        card.className = "card me-3";
+                        card.style.minWidth = "250px";
+                        card.innerHTML = `
+                            <div class="card-body">
+                                <h5 class="card-title">${recipe.name}</h5>
+                                <p class="card-text">Etiket Eşleşmesi: ${recipe.match_count}</p>
+                                <button class="btn btn-success" onclick="alert('Recipe is selected: ${recipe.name}')">Select Recipe</button>
+                            </div>
+                        `;
+                        container.appendChild(card);
+                    });
+                }
+            
+                // "Search" butonuna tıklanınca başlat
+                document.getElementById("searchButton").addEventListener("click", fetchRecipeSuggestions);
+
+            </script>
+            
+            
+            <script>
+                  document.addEventListener("DOMContentLoaded", function () {
+                      var dropdownItems = document.querySelectorAll(".dropdown-item");
+                      
+                      dropdownItems.forEach(function (item) {
+                          item.addEventListener("click", function () {
+                              var selectedCategory = this.getAttribute("onclick").match(/'([^']+)'/)[1];
+                              filterRecipes(selectedCategory);
+                          });
+                      });
+                  });
+
+                     function filterRecipes(category) {
+                       console.log("Filtering category:", category); // Konsolda hata olup olmadığını kontrol etmek için
+                       const recipes = document.querySelectorAll('#recipeList .col-md-4');
+                       recipes.forEach(recipe => {
+                           const recipeCategory = recipe.dataset.category.toLowerCase();
+                           if (category === 'all' || recipeCategory === category.toLowerCase()) {
+                               recipe.style.display = 'block';
+                           } else {
+                               recipe.style.display = 'none';
+                           }
+    });
+}
+                // Add item
+                document.getElementById('addItemForm').addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    const newItem = document.getElementById('newItem').value;
+                    const expiryDate = document.getElementById('expiryDate').value;
+    
+                    if (newItem && expiryDate) {
+                        const shoppingList = document.getElementById('shoppingList');
+                        const li = document.createElement('li');
+                        li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                        li.innerHTML = `
+                            ${newItem}
+                            <span class="quantity-number ms-2">1 unit</span>
+                            <span class="expiration-date ms-2">(Expiry: ${expiryDate})</span>
+                            <input type="checkbox" class="form-check-input item-checkbox ms-2">
+                        `;
+                        shoppingList.appendChild(li);
+                        document.getElementById('newItem').value = '';
+                        document.getElementById('expiryDate').value = '';
+                    }
+                });
+    
+                // Tarih min
+                document.querySelectorAll('input[type="date"]').forEach(input => {
+                    input.setAttribute('min', new Date().toISOString().split('T')[0]);
+                });
+    
+                // Clear all
+                function clearShoppingList() {
+                    document.getElementById('shoppingList').innerHTML = '';
+                }
+    
+                // Select all checkboxes
+                function selectAll() {
+                    document.querySelectorAll('.item-checkbox').forEach(cb => cb.checked = true);
+                }
+    
+                // Clear all checkbox selections
+                function clearSelection() {
+                    document.querySelectorAll('.item-checkbox').forEach(cb => cb.checked = false);
+                }
+            </script>
+        </div>
+    </body>
+    </html>

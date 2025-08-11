@@ -1,0 +1,400 @@
+/* Genel Ayarlar */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #F8F9FA;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #F5F5F5; /* Kırık beyaz */
+    padding: 15px;
+}
+
+.navbar-brand {
+    font-size: 24px;
+    font-weight: bold;
+    color: #01404E; 
+}
+
+.navbar-nav .nav-link {
+    color: #00BFA5;
+    font-weight: bold;
+}
+
+.profile-button {
+    background-color: #01404E;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.profile-menu {
+    display: none;
+    position: absolute;
+    background: white;
+    list-style: none;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.profile-menu li {
+    padding: 8px;
+}
+
+.profile-menu a {
+    text-decoration: none;
+    color: #01404E;
+}
+
+.profile-button:hover + .profile-menu {
+    display: block;
+}
+
+.main-section {
+    background: linear-gradient(to right, #BBC3C3, #EAFDFB);
+}
+
+/* Tarif Sayfası */
+.recipe-container {
+    display: flex;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.recipe-image {
+    flex: 1;
+    text-align: center;
+}
+
+.recipe-image img {
+    width: 100%;
+    max-height: 500px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.recipe-details {
+    flex: 1;
+    padding: 20px;
+}
+
+.recipe-details h1 {
+    color: #2E7D32;
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.prep-time {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.ingredient-list {
+    list-style-type: square;
+    padding-left: 20px;
+}
+
+.recipe-steps {
+    list-style-type: decimal;
+    padding-left: 20px;
+}
+
+/* Smart Chef Başlığı */
+.smart-chef-title {
+    text-align: center;
+    font-size: 36px;
+    font-weight: bold;
+    color: #00BFA5;
+    text-shadow: 2px 2px 5px rgba(0, 0, 255, 0.3);
+    margin-top: 20px;
+}
+
+/* Arama Bölümü */
+.search-section {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.search-section input {
+    padding: 10px;
+    width: 900px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.search-button {
+    background-color: #00BFA5;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.description {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+/* Find Recipes Butonu */
+.find-recipes-btn {
+    display: ruby-text;
+    margin: 20px auto;
+    background-color: #00BFA5; 
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    cursor: pointer;
+    font-size: 18px;
+    border-radius: 5px;
+}
+
+/* Slider */
+.slider-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    width: 90%;
+    margin: 30px auto;
+    border-radius: 10px;
+}
+
+.slider-container img {
+    width: 100%;
+    border-radius: 10px;
+    margin-right: 10px;
+    scroll-snap-align: center;
+    cursor: pointer; /* Tıklanabilir olduğunu göster */
+}
+
+.meal-planner-default-section {
+    margin-top: 72px;
+    max-width: 1220px;
+    min-width: 952px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 48px;
+    padding-right: 48px;
+}
+/* Meal Planner */
+.meal-planner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    height: 650px;
+    background: url('faded_background-food.webp') center/cover no-repeat;
+    filter: blur(0.2px) brightness(90%);
+}
+
+
+.meal-table {
+    margin: auto;
+}
+.meal-planner h1{
+    display: inline-block;
+    padding: 15px 30px;
+    font-size: 30px;
+    font-weight: bold;
+    color: #01404E;
+    background-color: #00BFA5;
+    border: 3px solid #01404E;
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.meal-planner {
+    color: whitesmoke;
+    font-weight: bold;
+}
+
+
+.meal-planner thead{
+    color: white;
+    font-weight: bold;
+    font-size: x-large;
+}
+
+.meal-planner input[type="date"] {
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%;
+    margin-top: 5px;
+    text-align: center;
+}
+
+
+/* Shopping List Item */
+/* .list-group-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+} */
+
+/* Wrapper for the item and expiry date */
+.item-wrapper {
+    flex-grow: 1; /* Allow the item name to grow and take available space */
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Add ellipsis (...) for overflow text */
+}
+
+/* Expiration Date Fixed */
+.expiration-date {
+    width: 150px; /* Fixed width for expiration date */
+    text-align: right; /* Align expiration date to the right */
+    font-size: 0.9em;
+    color: #888; /* Lighter color for the expiration date */
+}
+
+/* Remove button */
+.list-group-item button {
+    margin-left: 10px;
+}
+
+.shopping-list-container {
+    max-width: 600px;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.list-group-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    border: none;
+    border-bottom: 1px solid #ddd;
+}
+
+.list-group-item:last-child {
+    border-bottom: none;
+}
+
+/* .search-section {
+    max-width: 600px;
+    margin: 0 auto 20px;
+    display: flex;
+    gap: 10px;
+} */
+
+.search-input {
+    flex: 1;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.search-button {
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+.add-item-section {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.add-item-section input {
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.add-item-section button {
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+/* Footer */
+.footer {
+    background: #01404E; 
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.footer h3 {
+    font-size: 18px;
+}
+
+.footer .social-icons a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    margin-top: 5px;
+}
+
+.store-buttons img {
+    width: 120px;
+    margin-top: 10px;
+}
+
+.subscribe-section input {
+    padding: 10px;
+    width: 200px;
+    border: none;
+    border-radius: 5px;
+}
+
+.subscribe-button {
+    background-color: white;
+    color: #00897B;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li {
+    margin-bottom: 5px;
+}
+
+.footer-links a {
+    text-decoration: none;
+    color: white;
+}
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+}
+
+.gdpr-section a {
+    color: white;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+.language-selector {
+    background: white;
+    border: none;
+    padding: 5px;
+    border-radius: 5px;
+}
+
