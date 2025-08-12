@@ -1,5 +1,8 @@
 # Web framework
 flask
+flask-cors
+streamlit
+
 
 
 
