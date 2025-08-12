@@ -1,0 +1,21 @@
+# Web framework
+flask
+flask-cors
+
+# Data handling (eğer backend'te veri işleme varsa)
+pandas
+numpy
+
+# HTTP requests
+requests
+
+# AI / NLP (senin ai.py içinde varsa)
+transformers
+torch
+scikit-learn
+
+# HTML rendering (Flask templates vs. için)
+jinja2
+
+# Streamlit Cloud uyumu
+streamlit
